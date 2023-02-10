@@ -1,35 +1,40 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Navigate, NavLink, Route, Routes} from 'react-router-dom';
 import styles from './Site.module.css'
 import {Error404} from "./pages/Error404";
-import Page from "./pages/Page";
-import {dataState} from "../data/dataState";
+import {Page} from "./pages/Page";
+import {dataState} from "../dataState/dataState";
+import {useWindowSize} from "../halpers/useSize";
 
 
 export const Site = () => {
+
+    const windowSize = useWindowSize()
+    console.log(windowSize)
     return (
         <div>
             <div className={styles.header}><h1>HEADER</h1></div>
             <div className={styles.body}>
-                <div className={styles.nav}>
-                    <div>
-                        <div><NavLink className={({isActive})=>isActive? styles.active:styles.navLink} to={"/page/0"}>Page 1</NavLink></div>
-                        <div><NavLink className={({isActive})=>isActive? styles.active:styles.navLink} to={"/page/1"}>Page 2</NavLink></div>
-                        <div><NavLink className={({isActive})=>isActive? styles.active:styles.navLink} to={"/page/2"}>Page 3</NavLink></div>
-                        <div><a href="/page3">Page333</a></div>
+                {windowSize>700
+                ? <div className={styles.nav}>
+                        <div><NavLink to={'/page/0'} className={({isActive})=>isActive ?styles.active : styles.navLink}>PAGE 1</NavLink></div>
+                        <div><NavLink to={'/page/1'} className={({isActive})=>isActive ?styles.active : styles.navLink}>PAGE 2</NavLink></div>
+                        <div><NavLink to={'/page/2'} className={({isActive})=>isActive ?styles.active : styles.navLink}>PAGE 3</NavLink></div>
+                        {/*<div><NavLink to={'/page3'} className={({isActive})=>isActive ?styles.active : styles.navLink}>PAGE 3</NavLink></div>*/}
+                        {/*<div><a href='/page3'>PAGE 3 AHREF</a></div>*/}
                     </div>
-                </div>
+                :<div></div>}
+
                 <div className={styles.content}>
                     <Routes>
-                        <Route path={"/"} element={<Navigate to={"/page1"}/>}/>
+                        <Route path={'/'} element={<Navigate to={'/page/0'}/>}/>
 
-                        <Route path={"/page/:id"} element={<Page pages={dataState.pages}/>}/>
-                        {/*<Route path={"/page1"} element={<PageOne/>}/>
-                        <Route path={"/page2"} element={<PageTwo/>}/>
-                        <Route path={"/page3"} element={<PageThree/>}/>*/}
+                        <Route path={'/page/:id'} element={<Page pages={dataState.pages}/>}/>
 
+                        {/*<Route path={'/page2'} element={<PageTwo/>}/>*/}
+                        {/*<Route path={'/page3'} element={<PageThree/>}/>*/}
 
-                        <Route path={"/*/*"} element={<Error404/>}/>
+                        <Route path={'/*'} element={<Error404/>}/>
                     </Routes>
                 </div>
             </div>
